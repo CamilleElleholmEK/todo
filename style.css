@@ -1,0 +1,33 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.task {
+  display: grid;
+  grid-template-columns: 0.5fr 3fr 1fr 0.5fr;
+}
+
+.taskDescription {
+  background-color: pink;
+}
+
+.date {
+  background-color: red;
+}
+
+.deleteBtn {
+  background-color: blue;
+}
