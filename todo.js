@@ -2,6 +2,7 @@
 
 // Const
 const taskText = document.querySelector("#taskText");
+const dateField = document.querySelector("#date");
 const taskList = document.querySelector("#taskList");
 const doneList = document.querySelector("#doneList");
 const createBtn = document.querySelector("#create");
@@ -25,13 +26,14 @@ taskList.addEventListener("click", (e) => {
   if (e.target.classList.contains("deleteBtn")) {
     removeTask(e);
   } else if (e.target.type === "checkbox") {
-    console.log("checkbox clicked", e.target);
     create(e);
   }
 });
 doneList.addEventListener("click", (e) => {
   if (e.target.classList.contains("deleteBtn")) {
     removeDoneTask(e);
+  } else if (e.target.type === "checkbox") {
+    create(e);
   }
 });
 
@@ -39,20 +41,31 @@ doneList.addEventListener("click", (e) => {
 function create(e) {
   const taskObject = {
     taskText: taskText.value,
+    taskDate: dateField.value,
     taskDone: false,
     id: self.crypto.randomUUID(),
   };
   if (e.currentTarget === createBtn) {
     taskArray.push(taskObject);
     displayList(taskArray);
-    console.log("currentTarget:", e.currentTarget, "target:", e.target);
   } else if (e.target.type === "checkbox") {
     const doneId = e.target.closest("li").dataset.id;
-    const doneTask = taskArray.find((task) => task.id === doneId);
-    doneTask.taskDone = true;
-    doneArray.push(doneTask);
-    displayDoneList(doneArray);
-    removeTask(e);
+    if (
+      // target.checked = true, er hvis tasket ikke er done. omvendt logik
+      e.target.checked === true
+    ) {
+      const doneTask = taskArray.find((task) => task.id === doneId);
+      doneTask.taskDone = true;
+      doneArray.push(doneTask);
+      displayDoneList(doneArray);
+      removeTask(e);
+    } else {
+      const removedDoneTask = doneArray.find((task) => task.id === doneId);
+      removedDoneTask.taskDone = false;
+      taskArray.push(removedDoneTask);
+      displayList(taskArray);
+      removeDoneTask(e);
+    }
   }
 }
 
@@ -66,14 +79,19 @@ function displayList(arr) {
     const description = document.createElement("p");
     const date = document.createElement("p");
     const del = document.createElement("button");
+    const convertedDateY = task.taskDate.substring(0, 4);
+    const convertedDateM = task.taskDate.substring(5, 7);
+    const convertedDateD = task.taskDate.substring(8, 10);
 
     // Element content
     checkbox.type = "checkbox";
     description.innerHTML = `${task.taskText}`;
-    date.innerHTML = "dato";
+    date.innerHTML =
+      convertedDateD + " / " + convertedDateM + " / " + convertedDateY;
     del.innerHTML = "X";
 
     // Element class & data
+
     li.classList.add("task");
     li.dataset.id = `${task.id}`;
     checkbox.classList.add("checkbox");
@@ -90,7 +108,6 @@ function displayList(arr) {
 
 // ****************************************** Building and rendering done list *******************************
 function displayDoneList(arr) {
-  console.log("displayDoneList kørt med", arr);
   doneList.innerHTML = "";
   arr.forEach((task) => {
     // Create elements
