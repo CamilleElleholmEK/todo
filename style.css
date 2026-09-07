@@ -31,3 +31,7 @@ body {
 .deleteBtn {
   background-color: blue;
 }
+
+.outdoor {
+  border: green solid 2px;
+}

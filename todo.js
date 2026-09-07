@@ -3,6 +3,7 @@
 // Const
 const taskText = document.querySelector("#taskText");
 const dateField = document.querySelector("#date");
+const outdoorCheck = document.querySelector("#outdoorCheck");
 const taskList = document.querySelector("#taskList");
 const doneList = document.querySelector("#doneList");
 const createBtn = document.querySelector("#create");
@@ -21,7 +22,8 @@ taskText.addEventListener("keypress", (e) => {
   }
 });
 
-// Eventdelegation
+// **************************************** Event delegation *********************
+// Task list
 taskList.addEventListener("click", (e) => {
   if (e.target.classList.contains("deleteBtn")) {
     removeTask(e);
@@ -29,6 +31,7 @@ taskList.addEventListener("click", (e) => {
     create(e);
   }
 });
+// Done list
 doneList.addEventListener("click", (e) => {
   if (e.target.classList.contains("deleteBtn")) {
     removeDoneTask(e);
@@ -43,11 +46,12 @@ function create(e) {
     taskText: taskText.value,
     taskDate: dateField.value,
     taskDone: false,
+    taskOutdoor: outdoorCheck.checked,
     id: self.crypto.randomUUID(),
   };
   if (e.currentTarget === createBtn) {
     taskArray.push(taskObject);
-    displayList(taskArray);
+    displayList(taskArray, taskList);
   } else if (e.target.type === "checkbox") {
     const doneId = e.target.closest("li").dataset.id;
     if (
@@ -57,21 +61,21 @@ function create(e) {
       const doneTask = taskArray.find((task) => task.id === doneId);
       doneTask.taskDone = true;
       doneArray.push(doneTask);
-      displayDoneList(doneArray);
+      displayList(doneArray, doneList);
       removeTask(e);
     } else {
       const removedDoneTask = doneArray.find((task) => task.id === doneId);
       removedDoneTask.taskDone = false;
       taskArray.push(removedDoneTask);
-      displayList(taskArray);
+      displayList(taskArray, taskList);
       removeDoneTask(e);
     }
   }
 }
 
-// ************************************ Building tasks and rendering list ***********************
-function displayList(arr) {
-  taskList.innerHTML = "";
+// ************************************ Building tasks and rendering lists ***********************
+function displayList(arr, list) {
+  list.innerHTML = "";
   arr.forEach((task) => {
     // Create elements
     const li = document.createElement("li");
@@ -91,52 +95,26 @@ function displayList(arr) {
     del.innerHTML = "X";
 
     // Element class & data
-
     li.classList.add("task");
     li.dataset.id = `${task.id}`;
     checkbox.classList.add("checkbox");
+    checkbox.checked = task.taskDone;
     description.classList.add("taskDescription");
     date.classList.add("date");
     del.classList.add("deleteBtn");
+    // Tilføj styling til udendørs tasks
+    if (task.taskOutdoor === true) {
+      li.classList.add("outdoor");
+    }
 
     // Insert Elements in li
     li.append(checkbox, description, date, del);
-    taskList.appendChild(li);
+    list.appendChild(li);
   });
+
   taskText.value = "";
-}
-
-// ****************************************** Building and rendering done list *******************************
-function displayDoneList(arr) {
-  doneList.innerHTML = "";
-  arr.forEach((task) => {
-    // Create elements
-    const li = document.createElement("li");
-    const checkbox = document.createElement("input");
-    const description = document.createElement("p");
-    const date = document.createElement("p");
-    const del = document.createElement("button");
-
-    // Element content
-    checkbox.type = "checkbox";
-    description.innerHTML = `${task.taskText}`;
-    date.innerHTML = "dato";
-    del.innerHTML = "X";
-
-    // Element class & data
-    li.classList.add("task");
-    li.dataset.id = `${task.id}`;
-    checkbox.classList.add("checkbox");
-    checkbox.checked = true;
-    description.classList.add("taskDescription");
-    date.classList.add("date");
-    del.classList.add("deleteBtn");
-
-    // Insert Elements in li
-    li.append(checkbox, description, date, del);
-    doneList.appendChild(li);
-  });
-  taskText.value = "";
+  outdoorCheck.checked = false;
+  dateField.value = undefined;
 }
 
 // ****************************************** Remove tasks ****************************
@@ -148,7 +126,7 @@ function removeTask(e) {
   );
   taskArray.splice(taskId, 1);
   console.log(taskId);
-  displayList(taskArray);
+  displayList(taskArray, taskList);
 }
 
 // Done list
@@ -158,5 +136,5 @@ function removeDoneTask(e) {
     (task) => task.id === deletedTask.dataset.id,
   );
   doneArray.splice(taskId, 1);
-  displayDoneList(doneArray);
+  displayList(doneArray, doneList);
 }
