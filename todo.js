@@ -9,6 +9,9 @@ const outdoorCheck = document.querySelector("#outdoorCheck");
 const taskList = document.querySelector("#taskList");
 const doneList = document.querySelector("#doneList");
 const createBtn = document.querySelector("#create");
+const taskTextContainer = document.querySelector("#taskTextContainer");
+const openPopup = document.querySelector("#openPopup");
+const closePopup = document.querySelector("#closePopup");
 const taskArray = [];
 const doneArray = [];
 const wwCodes = {
@@ -42,7 +45,9 @@ const wwCodes = {
 };
 
 // Eventlisteners
-document.querySelector("#create").addEventListener("click", create);
+createBtn.addEventListener("click", create);
+openPopup.addEventListener("click", popup);
+closePopup.addEventListener("click", popup);
 taskText.addEventListener("keypress", (e) => {
   // If the user presses the "Enter" key on the keyboard
   if (e.key === "Enter" && taskText.value !== "") {
@@ -71,6 +76,16 @@ doneList.addEventListener("click", (e) => {
   }
 });
 
+// *********************************** Open and close popup **********************************
+function popup(e) {
+  document.querySelector("#taskTextContainer").classList.remove("hide");
+  if (e.target === openPopup) {
+    taskTextContainer.classList.remove("hide");
+  } else if (e.target === closePopup) {
+    taskTextContainer.classList.add("hide");
+  }
+}
+
 // *********************************** Push new and done tasks to arrays *********************
 function create(e) {
   const taskObject = {
@@ -90,8 +105,7 @@ function create(e) {
         displayList(taskArray, taskList);
       },
     );
-    // taskArray.push(taskObject);
-    // displayList(taskArray, taskList);
+    taskTextContainer.classList.add("hide");
   } else if (e.target.type === "checkbox") {
     const doneId = e.target.closest("li").dataset.id;
     if (
