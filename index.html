@@ -25,12 +25,23 @@
       <button id="openPopup">+ Nyt task</button>
       <div id="overlay"></div>
       <div id="createTaskContainer">
+        <div>
+          <p>Nyt task</p>
+          <button id="closePopup">X</button>
+        </div>
+        <label for="taskText">Hvad skal der ske?</label>
+        <input type="text" id="taskText" name="taskText" />
+        <div>
+          <div>
+            <label for="date">Vælg dato</label>
+            <input type="date" id="date" name="date" />
+          </div>
+          <div>
+            <label for="outdoorCheck">Udendørs?</label>
+            <input type="checkbox" id="outdoorCheck" name="outdoorCheck" />
+          </div>
+        </div>
         <button id="create">create</button>
-        <input type="text" id="taskText" />
-        <input type="date" id="date" />
-        <p>Udendørs?</p>
-        <input type="checkbox" id="outdoorCheck" />
-        <button id="closePopup">Close</button>
       </div>
     </section>
   </body>
