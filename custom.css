@@ -1,0 +1,10 @@
+:root {
+  --text-color: #2d2350;
+  --task-color: #ffffff75;
+  --secondary-color: #c8b6fe;
+  --task-warning: #b03a6e33;
+  --secondary-warning: #b03a6e;
+  --task-done: #ffffff33;
+  --weather-done: #ffffffb3;
+  --text-done: #2d2350bf;
+}

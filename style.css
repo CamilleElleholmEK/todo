@@ -11,31 +11,223 @@ img {
 }
 
 body {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  justify-content: center;
+  font-family: "Quicksand", sans-serif;
+  background-color: black;
+  color: var(--text-color);
+}
+
+#scope {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-image: url(png/background.png);
+  background-repeat: no-repeat;
+  width: 420px;
+  height: 875px;
+  border-radius: 16px;
+  margin-top: 80px;
+  overflow: hidden;
+  position: relative;
+}
+
+#listsContainer {
+  overflow-y: auto;
+  min-height: 0;
+  flex: 1;
+}
+
+h2 {
+  font-weight: 400;
+  font-size: 48px;
+  margin-bottom: 32px;
+  margin-top: 32px;
+}
+
+span {
+  color: #ffffff;
+  letter-spacing: -20%;
+  font-weight: 200;
 }
 
 .task {
-  display: grid;
-  grid-template-columns: 0.5fr 3fr 1fr 0.5fr;
+  display: flex;
+  width: 375px;
+  height: 116px;
+  background-color: var(--task-color);
+  backdrop-filter: blur(7px);
+  border-radius: 16px;
+  border: solid 1px white;
+  margin-bottom: 16px;
 }
 
-.hide {
-  display: none;
+.checkbox {
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  border: 2px solid var(--secondary-color);
+  appearance: none;
+  background-color: #ffffff;
+  outline: none;
+  border-radius: 8px;
+  margin: 40px 24px;
+}
+
+.checkbox:checked {
+  background-color: var(--secondary-color);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewBox="0 0 32 32" xml:space="preserve"><path style="fill: %23ffffff" d="M11.941,28.877l-11.941-11.942l5.695-5.696l6.246,6.246l14.364-14.364L32,8.818"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.checkbox:hover {
+  cursor: pointer;
+  scale: 1.1;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  height: 84px;
+  width: 206px;
+  margin: 16px 12px 16px 0px;
+  justify-content: space-between;
+}
+
+.date,
+.location {
+  font-weight: 400;
+  font-size: 16px;
 }
 
 .taskDescription {
-  background-color: pink;
+  font-size: 20px;
+  font-weight: 600;
 }
 
-.date {
-  background-color: red;
+.weatherBackground {
+  background-color: #ffffff;
+  height: 50px;
+  width: 50px;
+  border-radius: 100px;
+  border: solid 1px var(--secondary-color);
+  margin-top: 33px;
+}
+
+.task img {
+  height: 45px;
+  width: 45px;
 }
 
 .deleteBtn {
-  background-color: blue;
+  background-color: transparent;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  height: 20px;
+  width: 10px;
+  margin: 12px 8px 84px 6px;
 }
 
-.outdoor {
-  border: green solid 2px;
+.deleteBtn:hover {
+  color: var(--secondary-color);
+  transition: color 0.1s;
+}
+
+#openPopup {
+  appearance: none;
+  position: absolute;
+  bottom: 24px;
+  background-color: #ffffffb3;
+  appearance: none;
+  border: #ffffff solid 1px;
+  height: 50px;
+  width: 187px;
+  border-radius: 16px;
+  font-family: "Quicksand", sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+#openPopup:hover {
+  border: solid 2px var(--secondary-color);
+  cursor: pointer;
+}
+
+#overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+#overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#createTaskContainer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translateY(100%);
+  transition: transform 0.35s ease;
+  z-index: 20;
+}
+
+#createTaskContainer.show {
+  transform: translateY(0);
+}
+
+.done {
+  background-color: var(--task-done);
+  color: var(--text-done);
+  .taskDescription {
+    text-decoration: line-through;
+  }
+  .weatherBackground {
+    background-color: var(--weather-done);
+  }
+  img {
+    opacity: 70%;
+  }
+}
+
+.outdoor.badWeather {
+  border: solid 1px var(--secondary-warning);
+  background-color: var(--task-warning);
+  .checkbox {
+    border: 2px solid var(--secondary-warning);
+    background-color: #ffffffbf;
+  }
+  .weatherBackground {
+    background-color: #ffffffbf;
+    border: solid 1px var(--secondary-warning);
+  }
+  .deleteBtn:hover {
+    color: var(--secondary-warning);
+  }
+  .checkbox:checked {
+    background-color: var(--secondary-warning);
+  }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+#listsContainer::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+#listsContainer {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

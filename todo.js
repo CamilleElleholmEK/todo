@@ -9,7 +9,8 @@ const outdoorCheck = document.querySelector("#outdoorCheck");
 const taskList = document.querySelector("#taskList");
 const doneList = document.querySelector("#doneList");
 const createBtn = document.querySelector("#create");
-const taskTextContainer = document.querySelector("#taskTextContainer");
+const overlay = document.querySelector("#overlay");
+const createTaskContainer = document.querySelector("#createTaskContainer");
 const openPopup = document.querySelector("#openPopup");
 const closePopup = document.querySelector("#closePopup");
 const taskArray = [];
@@ -48,6 +49,7 @@ const wwCodes = {
 createBtn.addEventListener("click", create);
 openPopup.addEventListener("click", popup);
 closePopup.addEventListener("click", popup);
+overlay.addEventListener("click", popup);
 taskText.addEventListener("keypress", (e) => {
   // If the user presses the "Enter" key on the keyboard
   if (e.key === "Enter" && taskText.value !== "") {
@@ -78,11 +80,13 @@ doneList.addEventListener("click", (e) => {
 
 // *********************************** Open and close popup **********************************
 function popup(e) {
-  document.querySelector("#taskTextContainer").classList.remove("hide");
+  document.querySelector("#createTaskContainer").classList.remove("hide");
   if (e.target === openPopup) {
-    taskTextContainer.classList.remove("hide");
+    createTaskContainer.classList.add("show");
+    overlay.classList.add("show");
   } else if (e.target === closePopup) {
-    taskTextContainer.classList.add("hide");
+    createTaskContainer.classList.remove("show");
+    overlay.classList.remove("show");
   }
 }
 
@@ -105,7 +109,7 @@ function create(e) {
         displayList(taskArray, taskList);
       },
     );
-    taskTextContainer.classList.add("hide");
+    createTaskContainer.classList.add("hide");
   } else if (e.target.type === "checkbox") {
     const doneId = e.target.closest("li").dataset.id;
     if (
@@ -134,8 +138,11 @@ function displayList(arr, list) {
     // Create elements
     const li = document.createElement("li");
     const checkbox = document.createElement("input");
-    const description = document.createElement("p");
     const date = document.createElement("p");
+    const description = document.createElement("p");
+    const location = document.createElement("p");
+    const div = document.createElement("div");
+    const weatherBackground = document.createElement("div");
     const weather = document.createElement("img");
     const del = document.createElement("button");
     const convertedDateY = task.taskDate.substring(0, 4);
@@ -149,6 +156,13 @@ function displayList(arr, list) {
       convertedDateD + " / " + convertedDateM + " / " + convertedDateY;
     weather.src = `png/${wwCodes[task.weatherCode]}`;
     del.innerHTML = "X";
+    task.taskOutdoor === true && task.weatherCode > 50
+      ? (location.innerHTML = "! Udendørs !")
+      : task.taskOutdoor === false
+        ? (location.innerHTML = "Indendørs")
+        : task.taskOutdoor === true
+          ? (location.innerHTML = "Udendørs")
+          : (location.innerHTML = "Indendørs");
 
     // Element class & data
     li.classList.add("task");
@@ -157,14 +171,24 @@ function displayList(arr, list) {
     checkbox.checked = task.taskDone;
     description.classList.add("taskDescription");
     date.classList.add("date");
+    div.classList.add("textContainer");
+    weatherBackground.classList.add("weatherBackground");
     del.classList.add("deleteBtn");
+    task.taskDone === true
+      ? li.classList.add("done")
+      : li.classList.remove("done");
     // Tilføj styling til udendørs tasks
     if (task.taskOutdoor === true) {
       li.classList.add("outdoor");
     }
+    if (task.weatherCode > 50) {
+      li.classList.add("badWeather");
+    }
 
     // Insert Elements in li
-    li.append(checkbox, description, date, weather, del);
+    div.append(date, description, location);
+    weatherBackground.append(weather);
+    li.append(checkbox, div, weatherBackground, del);
     list.appendChild(li);
   });
 

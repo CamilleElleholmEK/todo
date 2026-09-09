@@ -6,22 +6,32 @@
     <title>To do app</title>
     <script type="module" src="todo.js" defer></script>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="custom.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <div id="listsContainer">
-      <p>To do</p>
-      <ul id="taskList"></ul>
-      <p>Done</p>
-      <ul id="doneList"></ul>
-    </div>
-    <button id="openPopup">Lav nyt task</button>
-    <div id="taskTextContainer" class="hide">
-      <button id="create">create</button>
-      <input type="text" id="taskText" />
-      <input type="date" id="date" />
-      <p>Udendørs?</p>
-      <input type="checkbox" id="outdoorCheck" />
-      <button id="closePopup">Close</button>
-    </div>
+    <section id="scope">
+      <div id="listsContainer">
+        <h2>To do <span>-----------------------</span></h2>
+        <ul id="taskList"></ul>
+        <h2>Done <span>-----------------------</span></h2>
+        <ul id="doneList"></ul>
+      </div>
+      <button id="openPopup">+ Nyt task</button>
+      <div id="overlay"></div>
+      <div id="createTaskContainer">
+        <button id="create">create</button>
+        <input type="text" id="taskText" />
+        <input type="date" id="date" />
+        <p>Udendørs?</p>
+        <input type="checkbox" id="outdoorCheck" />
+        <button id="closePopup">Close</button>
+      </div>
+    </section>
   </body>
 </html>
