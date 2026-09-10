@@ -1,6 +1,6 @@
 "use strict";
 
-import { loadJSON } from "./utils_lib.js";
+import { loadJSON } from "./utils_lib/utils_lib.js";
 
 // Const
 const taskText = document.querySelector("#taskText");
