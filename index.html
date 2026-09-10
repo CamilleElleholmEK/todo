@@ -22,26 +22,35 @@
         <h2>Done <span>-----------------------</span></h2>
         <ul id="doneList"></ul>
       </div>
-      <button id="openPopup">+ Nyt task</button>
+      <button id="openPopup">+ New task</button>
       <div id="overlay"></div>
       <div id="createTaskContainer">
-        <div>
-          <p>Nyt task</p>
-          <button id="closePopup">X</button>
-        </div>
-        <label for="taskText">Hvad skal der ske?</label>
-        <input type="text" id="taskText" name="taskText" />
-        <div>
+        <form action="">
           <div>
-            <label for="date">Vælg dato</label>
-            <input type="date" id="date" name="date" />
+            <p>New task</p>
+            <button id="closePopup">X</button>
           </div>
+          <label for="taskText" id="taskLabel">What needs to be done?</label>
+          <input type="text" id="taskText" name="taskText" required />
           <div>
-            <label for="outdoorCheck">Udendørs?</label>
-            <input type="checkbox" id="outdoorCheck" name="outdoorCheck" />
+            <div>
+              <label for="date" id="dateLabel">Choose date</label>
+              <input
+                type="date"
+                id="date"
+                name="date"
+                required
+                min="2026-09-10"
+                max="2026-09-24"
+              />
+            </div>
+            <div>
+              <label for="outdoorCheck">Outdoors?</label>
+              <input type="checkbox" id="outdoorCheck" name="outdoorCheck" />
+            </div>
           </div>
-        </div>
-        <button id="create">create</button>
+          <button type="submit" id="create">Add task</button>
+        </form>
       </div>
     </section>
   </body>

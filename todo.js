@@ -8,7 +8,7 @@ const dateField = document.querySelector("#date");
 const outdoorCheck = document.querySelector("#outdoorCheck");
 const taskList = document.querySelector("#taskList");
 const doneList = document.querySelector("#doneList");
-const createBtn = document.querySelector("#create");
+const form = document.querySelector("form");
 const overlay = document.querySelector("#overlay");
 const createTaskContainer = document.querySelector("#createTaskContainer");
 const openPopup = document.querySelector("#openPopup");
@@ -43,10 +43,12 @@ const wwCodes = {
   85: "lightsnowshowers_day.png",
   86: "heavysnowshowers_day.png",
   95: "rainandthunder.png",
+  96: "rainandthunder.png",
+  99: "rainandthunder.png",
 };
 
 // Eventlisteners
-createBtn.addEventListener("click", create);
+form.addEventListener("submit", createNew);
 openPopup.addEventListener("click", popup);
 closePopup.addEventListener("click", popup);
 overlay.addEventListener("click", popup);
@@ -56,7 +58,8 @@ taskText.addEventListener("keypress", (e) => {
     // Cancel the default action, if needed
     e.preventDefault();
     // Trigger the button element with a click
-    createBtn.click();
+    form.submit();
+    closePopup.click();
   }
 });
 
@@ -66,7 +69,7 @@ taskList.addEventListener("click", (e) => {
   if (e.target.classList.contains("deleteBtn")) {
     removeTask(e);
   } else if (e.target.type === "checkbox") {
-    create(e);
+    moveTask(e);
   }
 });
 // Done list
@@ -74,7 +77,7 @@ doneList.addEventListener("click", (e) => {
   if (e.target.classList.contains("deleteBtn")) {
     removeDoneTask(e);
   } else if (e.target.type === "checkbox") {
-    create(e);
+    moveTask(e);
   }
 });
 
@@ -91,7 +94,7 @@ function popup(e) {
 }
 
 // *********************************** Push new and done tasks to arrays *********************
-function create(e) {
+function createNew(e) {
   const taskObject = {
     taskText: taskText.value,
     taskDate: dateField.value,
@@ -100,37 +103,39 @@ function create(e) {
     id: self.crypto.randomUUID(),
   };
 
-  if (e.currentTarget === createBtn) {
-    loadJSON(
-      `https://api.open-meteo.com/v1/forecast?latitude=55.68&longitude=12.57&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto&start_date=${taskObject.taskDate}&end_date=${taskObject.taskDate}`,
-      (data) => {
-        taskObject.weatherCode = data.daily.weathercode[0];
-        taskArray.push(taskObject);
-        displayList(taskArray, taskList);
-      },
-    );
-    createTaskContainer.classList.add("hide");
-  } else if (e.target.type === "checkbox") {
-    const doneId = e.target.closest("li").dataset.id;
-    if (
-      // target.checked = true, er hvis tasket ikke er done. omvendt logik
-      e.target.checked === true
-    ) {
-      const doneTask = taskArray.find((task) => task.id === doneId);
-      doneTask.taskDone = true;
-      doneArray.push(doneTask);
-      displayList(doneArray, doneList);
-      removeTask(e);
-    } else {
-      const removedDoneTask = doneArray.find((task) => task.id === doneId);
-      removedDoneTask.taskDone = false;
-      taskArray.push(removedDoneTask);
+  e.preventDefault();
+  loadJSON(
+    `https://api.open-meteo.com/v1/forecast?latitude=55.68&longitude=12.57&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto&start_date=${taskObject.taskDate}&end_date=${taskObject.taskDate}`,
+    (data) => {
+      taskObject.weatherCode = data.daily.weathercode[0];
+      taskArray.push(taskObject);
       displayList(taskArray, taskList);
-      removeDoneTask(e);
-    }
-  }
+    },
+  );
+  closePopup.click();
 }
 
+// **********************************'* Move task from one list to another *******************************
+
+function moveTask(e) {
+  const doneId = e.target.closest("li").dataset.id;
+  if (
+    // target.checked = true, er hvis tasket ikke er done. omvendt logik
+    e.target.checked === true
+  ) {
+    const doneTask = taskArray.find((task) => task.id === doneId);
+    doneTask.taskDone = true;
+    doneArray.push(doneTask);
+    displayList(doneArray, doneList);
+    removeTask(e);
+  } else {
+    const removedDoneTask = doneArray.find((task) => task.id === doneId);
+    removedDoneTask.taskDone = false;
+    taskArray.push(removedDoneTask);
+    displayList(taskArray, taskList);
+    removeDoneTask(e);
+  }
+}
 // ************************************ Building tasks and rendering lists ***********************
 function displayList(arr, list) {
   list.innerHTML = "";
@@ -157,12 +162,12 @@ function displayList(arr, list) {
     weather.src = `png/${wwCodes[task.weatherCode]}`;
     del.innerHTML = "X";
     task.taskOutdoor === true && task.weatherCode > 50
-      ? (location.innerHTML = "! Udendørs !")
+      ? (location.innerHTML = "! Outdoors !")
       : task.taskOutdoor === false
-        ? (location.innerHTML = "Indendørs")
+        ? (location.innerHTML = "Indoors")
         : task.taskOutdoor === true
-          ? (location.innerHTML = "Udendørs")
-          : (location.innerHTML = "Indendørs");
+          ? (location.innerHTML = "Outdoors")
+          : (location.innerHTML = "Indoors");
 
     // Element class & data
     li.classList.add("task");
