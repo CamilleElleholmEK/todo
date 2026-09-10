@@ -93,7 +93,7 @@ function popup(e) {
   }
 }
 
-// *********************************** Push new and done tasks to arrays *********************
+// *********************************** Push new tasks to array *********************
 function createNew(e) {
   const taskObject = {
     taskText: taskText.value,
@@ -182,7 +182,8 @@ function displayList(arr, list) {
     task.taskDone === true
       ? li.classList.add("done")
       : li.classList.remove("done");
-    // Tilføj styling til udendørs tasks
+
+    // Add outdoor and bad weather classes
     if (task.taskOutdoor === true) {
       li.classList.add("outdoor");
     }
