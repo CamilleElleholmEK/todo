@@ -227,8 +227,6 @@ span {
   color: var(--text-done);
 }
 
-
-
 #createTaskContainer div div {
   flex-direction: column;
 }
@@ -242,8 +240,20 @@ span {
   border: #ffffff solid 1px;
   margin-top: 8px;
   margin-bottom: 24px;
+  padding: 0 24px;
+  width: 375px;
 }
 
+#createTaskContainer input[type="date"] {
+  height: 50px;
+  border-radius: 16px;
+  appearance: none;
+  background-color: var(--task-color);
+  border: #ffffff solid 1px;
+  font-family: "Quicksand", sans-serif;
+  padding: 0 24px;
+  color: var(--text-color);
+}
 #createTaskContainer input[type="checkbox"] {
   width: 50px;
   height: 50px;
@@ -253,6 +263,32 @@ span {
   background-color: var(--task-color);
   border-radius: 16px;
   margin-top: 8px;
+}
+
+#createTaskContainer div:nth-last-of-type(1) {
+  margin-right: 11px;
+}
+
+#createTaskContainer input[type="checkbox"]:checked {
+  background-color: var(--secondary-warning);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewBox="0 0 32 32" xml:space="preserve"><path style="fill: %23ffffff" d="M11.941,28.877l-11.941-11.942l5.695-5.696l6.246,6.246l14.364-14.364L32,8.818"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  border: solid 1px var(--secondary-warning);
+}
+
+#create {
+  background-color: var(--task-warning);
+  border: solid 1px var(--secondary-warning);
+  border-radius: 16px;
+  height: 50px;
+  margin-top: 24px;
+  margin-right: 22.5px;
+  font-family: "Quicksand", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-color);
+  width: 375px;
 }
 
 .done {
